@@ -14,3 +14,4 @@ def initialize_gee():
 
     ee.Initialize(project=project_id)
     print("GEE initialized successfully")
+

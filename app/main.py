@@ -7,6 +7,8 @@ from app.modules.ndvi import validate_ndvi
 from app.modules.landuse import compute_land_use_score
 from app.config import initialize_gee
 
+
+
 app = FastAPI(
     title="Agricultural Plot Validation API",
     version="2.0.0"
@@ -95,6 +97,7 @@ def validate_plot(request: PlotRequest):
             "land_use": landuse_result
         }
 
+   
     # SUCCESS
     return {
         "decision": "PASS",
@@ -103,5 +106,5 @@ def validate_plot(request: PlotRequest):
         "crop": request.crop,
         "geometry": geometry_result,
         "ndvi": ndvi_result,
-        "land_use": landuse_result
+        "land_use": landuse_result,
     }
