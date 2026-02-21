@@ -270,32 +270,18 @@ const MapComponent = () => {
     setIsValidating(true)
     setValidationResult(null)
 
-    const payload = {
-      farmer_id: 'farmer-001',
-      crop: selectedCrop || 'rice',
-      polygon: geoJson
-    }
-    console.log('[AgroHunt] Sending validation request:', payload)
-
     try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 120000) // 2 min timeout
-
       const response = await fetch('/api/validate-plot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
+        body: JSON.stringify({
+          farmer_id: 'farmer-001',
+          crop: selectedCrop || 'rice',
+          polygon: geoJson
+        })
       })
-      clearTimeout(timeoutId)
-
-      if (!response.ok) {
-        const errBody = await response.text()
-        throw new Error(`Server ${response.status}: ${errBody}`)
-      }
-
       const result = await response.json()
-      console.log('[AgroHunt] Validation result:', result)
+      console.log('Validation result:', result)
 
       // Mark the shape with its validation status
       setShapes(s => s.map(sh =>
@@ -480,8 +466,20 @@ const MapComponent = () => {
         )}
       </MapContainer>
 
-      {/* Validate button for selected shape */}
-      {selectedShapeId && activeTool === 'select' && (
+
+      {/* Finish Polygon button when drawing */}
+      {activeTool === 'polygon' && drawingPoints.length >= 3 && (
+        <button
+          className="finish-btn"
+          style={{ position: 'absolute', bottom: 90, left: '50%', transform: 'translateX(-50%)', zIndex: 1200 }}
+          onClick={finalizePolygon}
+        >
+          \u2714 Finish Polygon
+        </button>
+      )}
+
+      {/* Validate button for selected shape (only when not drawing) */}
+      {selectedShapeId && activeTool !== 'polygon' && (
         <button
           className="validate-btn"
           onClick={handleValidateSelected}
