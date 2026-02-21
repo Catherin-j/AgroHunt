@@ -1,0 +1,92 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.example
+*.pem
+*.key
+*.cert
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
+.pytype/
+.dmypy.json
+dmypy.json
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.env.venv
+
+# Build and packaging artifacts
+build/
+dist/
+site/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+develop-eggs/
+
+# Test and coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+coverage.json
+*.cover
+
+# Database and runtime files
+*.log
+*.pid
+*.out
+*.err
+*.sqlite3
+*.db
+*.sqlite
+*.postgres_dump
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# GEE / Earth Engine
+ee_key.json
+service_account_key.json
+credentials.json
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.orig
+
+# Temporary & Local Files
+*.tmp
+*.temp
+*.cache

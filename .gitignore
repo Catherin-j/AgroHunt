@@ -1,7 +1,17 @@
-# Environment files
+# ========================================
+# Environment & Secrets
+# ========================================
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
+.env.example
+*.pem
+*.key
+*.cert
+
+# ========================================
+# Backend (Python/FastAPI)
+# ========================================
 
 # Python bytecode and caches
 __pycache__/
@@ -14,12 +24,18 @@ __pycache__/
 .hypothesis/
 .tox/
 .nox/
+.pytype/
+.dmypy.json
+dmypy.json
 
 # Virtual environments
 venv/
 .venv/
 env/
 ENV/
+env.bak/
+venv.bak/
+.env.venv
 
 # Build and packaging artifacts
 build/
@@ -29,106 +45,95 @@ site/
 .eggs/
 *.egg
 pip-wheel-metadata/
+develop-eggs/
 
 # Test and coverage artifacts
 .coverage
 .coverage.*
 htmlcov/
 coverage.xml
+coverage.json
+*.cover
 
-# Local runtime and database files
+# Database and runtime files
 *.log
 *.pid
 *.out
 *.err
 *.sqlite3
 *.db
+*.sqlite
+*.postgres_dump
 
-# Notebook checkpoints
+# Jupyter Notebook
 .ipynb_checkpoints/
+*.ipynb
 
-# IDE/editor files
+# GEE / Earth Engine
+ee_key.json
+service_account_key.json
+credentials.json
+
+# ========================================
+# Frontend (React/Vite/Node)
+# ========================================
+
+# Node modules and dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build and dist artifacts
+frontend/dist/
+frontend/build/
+frontend/.next/
+frontend/out/
+
+# Vite-specific
+.vite/
+
+# npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+.nyc_output
+coverage/
+*.lcov
+
+# ========================================
+# IDE/Editor Files
+# ========================================
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS files
+*.sublime-project
+*.sublime-workspace
 .DS_Store
 Thumbs.db
+*.orig
 
-# Frontend - Node modules and dependencies
-frontend/node_modules/
-node_modules/
+# ========================================
+# OS Files
+# ========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Frontend - Build outputs
-frontend/dist/
-frontend/build/
-frontend/.next/
-frontend/.nuxt/
-frontend/.output/
-frontend/out/
-
-# Frontend - Lock files (optional - uncomment if you want to track them)
-frontend/package-lock.json
-frontend/yarn.lock
-frontend/pnpm-lock.yaml
-
-# Frontend - Cache and temp files
-frontend/.vite/
-frontend/vite.config.js.timestamp-*
-frontend/.cache/
-frontend/.parcel-cache/
-frontend/.eslintcache
-frontend/.stylelintcache
-.cache/
-
-# Frontend - TypeScript
-frontend/*.tsbuildinfo
-frontend/.tsbuildinfo
-
-# Frontend - Testing
-frontend/coverage/
-frontend/.nyc_output/
-frontend/test-results/
-frontend/playwright-report/
-
-# Frontend - Storybook
-frontend/storybook-static/
-frontend/.storybook/build/
-
-# Static assets and uploads
-frontend/uploads/
-backend/uploads/
-uploads/
+# ========================================
+# Temporary & Local Files
+# ========================================
 *.tmp
 *.temp
-
-# Environment and config
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-frontend/.env.local
-frontend/.env.development.local
-frontend/.env.test.local
-frontend/.env.production.local
-
-# Debug and error logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-pnpm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
+*.cache
+.vercel
+.netlify
+.turbo/

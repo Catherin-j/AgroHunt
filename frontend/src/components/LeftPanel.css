@@ -5,8 +5,8 @@
   top: 0;
   width: 260px;
   height: 100vh;
-  background: var(--bg-panel);
-  color: var(--text-primary);
+  background: #000;
+  color: #fff;
   padding: 20px 18px;
   overflow-y: auto;
   z-index: 1000;
@@ -27,7 +27,7 @@
   font-size: 17px;
   font-weight: 800;
   margin: 0;
-  color: var(--text-primary);
+  color: #fff;
   letter-spacing: -0.3px;
 }
 
@@ -42,9 +42,12 @@
 }
 
 .panel-section {
-  margin-bottom: 22px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 24px;
+  padding: 18px 14px;
+  border-bottom: none;
+  background: #181818;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .panel-section:last-child {
@@ -92,7 +95,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  color: var(--text-primary);
+  color: #fff;
   font-size: 13px;
   font-family: inherit;
   transition: var(--transition);
@@ -123,7 +126,7 @@
 .fly-button {
   width: 100%;
   padding: 11px;
-  background: var(--accent);
+  background: #12b76a;
   border: none;
   border-radius: var(--radius-sm);
   color: #fff;
@@ -137,8 +140,8 @@
 }
 
 .fly-button:hover {
-  background: var(--accent-hover);
-  box-shadow: 0 4px 14px var(--accent-glow);
+  background: #0e9e5a;
+  box-shadow: 0 4px 14px rgba(18, 183, 106, 0.15);
   transform: translateY(-1px);
 }
 
@@ -210,7 +213,7 @@
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.8px;
-  color: var(--text-muted);
+  color: #fff;
   margin-bottom: 4px;
 }
 
