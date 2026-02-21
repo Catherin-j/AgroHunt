@@ -38,3 +38,15 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 # 🔥 THIS is what crop_engine imports
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# config.py
+
+# temp validation 
+SCORING_WEIGHTS = {
+    "geometry": 0.15,
+    "ndvi": 0.25,
+    "land": 0.25,
+    "crop": 0.20,
+    "overlap": 0.15
+}
+
+PASS_THRESHOLD = 0.65
