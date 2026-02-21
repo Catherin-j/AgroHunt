@@ -1,11 +1,6 @@
 import ee
 from shapely.geometry import shape
 
-try:
-    ee.Initialize(project='agri-validation-system')
-except Exception:
-    ee.Authenticate()
-    ee.Initialize(project='agri-validation-system')
 
 def mask_s2_clouds(image):
     scl = image.select('SCL')
