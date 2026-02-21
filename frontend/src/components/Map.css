@@ -99,3 +99,39 @@
 .suggested-area-tooltip::before {
   border-top-color: var(--accent) !important;
 }
+
+/* ── Validate button ── */
+.validate-btn {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  padding: 12px 28px;
+  background: var(--success, #12b76a);
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(18, 183, 106, 0.35);
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.validate-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 24px rgba(18, 183, 106, 0.45);
+}
+
+.validate-btn:active:not(:disabled) {
+  transform: translateX(-50%) translateY(0);
+}
+
+.validate-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
