@@ -10,27 +10,27 @@
 :root {
   --bg-primary: #ffffff;
   --bg-secondary: #f4f5f7;
-  --bg-panel: #2c2c2e;
+  --bg-panel: rgba(255, 255, 255, 0.92);
   --bg-card: rgba(0, 0, 0, 0.03);
   --bg-card-hover: rgba(0, 0, 0, 0.06);
   --bg-input: rgba(0, 0, 0, 0.04);
   --bg-input-focus: rgba(0, 0, 0, 0.06);
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-medium: rgba(0, 0, 0, 0.14);
-  --border-focus: #12b76a;
+  --border-focus: #0d99ff;
   --text-primary: #1a1a2e;
   --text-secondary: #5c5f6a;
   --text-muted: #9ea0a8;
-  --accent: #12b76a;
-  --accent-hover: #0ea15e;
-  --accent-glow: rgba(18, 183, 106, 0.15);
+  --accent: #e0e0e0;
+  --accent-hover: #cccccc;
+  --accent-glow: rgba(224, 224, 224, 0.15);
   --success: #12b76a;
   --success-bg: rgba(18, 183, 106, 0.1);
   --warning: #f59e0b;
   --warning-bg: rgba(245, 158, 11, 0.1);
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.08);
-  --cool: #12b76a;
+  --cool: #0d99ff;
   --warm: #f97316;
   --radius-xs: 4px;
   --radius-sm: 6px;
@@ -45,30 +45,31 @@
 }
 
 /* ═══════ DARK MODE ═══════ */
+.dark-theme,
 body.dark {
   --bg-primary: #111118;
   --bg-secondary: #1a1a26;
-  --bg-panel: #2c2c2e;
+  --bg-panel: #000;
   --bg-card: rgba(255, 255, 255, 0.04);
   --bg-card-hover: rgba(255, 255, 255, 0.07);
   --bg-input: rgba(255, 255, 255, 0.06);
   --bg-input-focus: rgba(255, 255, 255, 0.1);
   --border-subtle: rgba(255, 255, 255, 0.07);
   --border-medium: rgba(255, 255, 255, 0.12);
-  --border-focus: #34d399;
+  --border-focus: #0d99ff;
   --text-primary: #e8e8ef;
   --text-secondary: rgba(255, 255, 255, 0.5);
   --text-muted: rgba(255, 255, 255, 0.28);
-  --accent: #34d399;
-  --accent-hover: #5eead4;
-  --accent-glow: rgba(52, 211, 153, 0.2);
+  --accent: #22232b;
+  --accent-hover: #2d2e38;
+  --accent-glow: rgba(34, 35, 43, 0.15);
   --success: #34d399;
   --success-bg: rgba(52, 211, 153, 0.12);
   --warning: #fbbf24;
   --warning-bg: rgba(251, 191, 36, 0.12);
   --danger: #f87171;
   --danger-bg: rgba(248, 113, 113, 0.1);
-  --cool: #34d399;
+  --cool: #60a5fa;
   --warm: #fb923c;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
