@@ -65,7 +65,7 @@
 .shape-tooltip {
   background: var(--bg-primary) !important;
   border: 1px solid var(--accent) !important;
-  color: var(--accent) !important;
+  color: #111 !important;
   font-weight: 700;
   font-size: 11px;
   font-family: 'Inter', sans-serif;

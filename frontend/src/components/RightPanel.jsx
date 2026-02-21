@@ -2,7 +2,7 @@ import React from 'react'
 import { Activity, Thermometer, Droplets, Wind, CloudRain, Sun, Info, AlertTriangle } from 'lucide-react'
 import './RightPanel.css'
 
-const RightPanel = ({ cropData }) => {
+const RightPanel = ({ cropData, selectedShapeId, activeTool, isValidating, onValidate }) => {
   // Default data structure
   const data = cropData || {
     area: '2.3 ha',
@@ -37,6 +37,17 @@ const RightPanel = ({ cropData }) => {
       </div>
 
       <div className="panel-content">
+        {/* Validate Plot button (only when a shape is selected and not drawing) */}
+        {selectedShapeId && activeTool !== 'polygon' && (
+          <button
+            className="validate-btn"
+            style={{ width: '100%', marginBottom: 16 }}
+            onClick={onValidate}
+            disabled={isValidating}
+          >
+            {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
+          </button>
+        )}
         {/* Plausibility Highlight */}
         <div className="highlight-card">
           <div className="card-label">PLAUSIBILITY</div>

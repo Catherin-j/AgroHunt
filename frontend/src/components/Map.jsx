@@ -482,6 +482,7 @@ const MapComponent = () => {
       {selectedShapeId && activeTool !== 'polygon' && (
         <button
           className="validate-btn"
+          style={{ position: 'absolute', bottom: 145, left: '50%', transform: 'translateX(-50%)', zIndex: 1200, minWidth: 180, fontWeight: 600, fontSize: 16, borderRadius: 8, padding: '10px 24px', background: '#00ff88', color: '#181818', boxShadow: '0 2px 12px #00ff8855', border: 'none', transition: 'background 0.2s' }}
           onClick={handleValidateSelected}
           disabled={isValidating}
         >

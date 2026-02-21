@@ -92,10 +92,14 @@
 .form-group select {
   width: 100%;
   padding: 10px 12px;
-  background: var(--bg-input);
+  background: #e0e0e0;
+  border: 2px solid #222;
+  color: #111;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: #111;
   font-size: 13px;
   font-family: inherit;
   transition: var(--transition);
