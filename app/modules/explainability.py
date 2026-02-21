@@ -51,7 +51,7 @@ def generate_explainability(
         )
     else:
         explanation.append(
-            "Current satellite images show limited vegetation on the land."
+            "Current satellite images show limited vegetation on the land!"
         )
 
     # -------------------------------------------------
