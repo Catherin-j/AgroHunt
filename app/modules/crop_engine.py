@@ -5,10 +5,6 @@ import ee
 from app.config import supabase
 
 
-# =====================================================
-# 1️⃣ Fetch Climate Data
-# =====================================================
-
 def fetch_climate(lat: float, lon: float, year: int = 2023):
 
     url = "https://power.larc.nasa.gov/api/temporal/daily/point"
@@ -31,18 +27,10 @@ def fetch_climate(lat: float, lon: float, year: int = 2023):
     temps = list(data["properties"]["parameter"]["T2M"].values())
     rains = list(data["properties"]["parameter"]["PRECTOTCORR"].values())
 
-    mean_temp = sum(temps) / len(temps)
-    total_rain = sum(rains)
+    return sum(rains), sum(temps) / len(temps)
 
-    return total_rain, mean_temp
-
-
-# =====================================================
-# 2️⃣ Elevation from SRTM
-# =====================================================
 
 def get_elevation(polygon_ee):
-
     srtm = ee.Image("USGS/SRTMGL1_003")
 
     stats = srtm.reduceRegion(
@@ -51,24 +39,12 @@ def get_elevation(polygon_ee):
         scale=30
     )
 
-    elevation = stats.get("elevation").getInfo()
+    return stats.get("elevation").getInfo()
 
-    return elevation
-
-
-# =====================================================
-# 3️⃣ Crop Requirements
-# =====================================================
 
 def get_crop_requirements(crop: str):
 
     crop = crop.strip().lower()
-
-    print("Looking for crop:", crop)
-
-    # Print all rows
-    all_rows = supabase.table("crop_requirements").select("*").execute()
-    print("ALL ROWS:", all_rows.data)
 
     response = (
         supabase.table("crop_requirements")
@@ -76,8 +52,6 @@ def get_crop_requirements(crop: str):
         .ilike("crop_name", crop)
         .execute()
     )
-
-    print("MATCH RESULT:", response.data)
 
     if not response.data:
         raise ValueError(f"Crop '{crop}' not found in database")
@@ -104,9 +78,7 @@ def get_crop_requirements(crop: str):
             row["elev_abs_max"]
         )
     }
-# =====================================================
-# 4️⃣ Trapezoidal Suitability
-# =====================================================
+
 
 def trapezoidal_suitability(value, abs_min, opt_min, opt_max, abs_max):
 
@@ -125,10 +97,6 @@ def trapezoidal_suitability(value, abs_min, opt_min, opt_max, abs_max):
     return 0.0
 
 
-# =====================================================
-# 5️⃣ Final Crop Evaluation
-# =====================================================
-
 def evaluate_crop(polygon_ee, crop: str, lat: float, lon: float):
 
     rainfall, temperature = fetch_climate(lat, lon)
@@ -140,16 +108,11 @@ def evaluate_crop(polygon_ee, crop: str, lat: float, lon: float):
     temp_score = trapezoidal_suitability(temperature, *crop_data["temp"])
     elev_score = trapezoidal_suitability(elevation, *crop_data["elev"])
 
-    if rainfall_score == 0:
-        crop_score = 0.0
-        climate_flag = "Rainfall unsuitable — crop rejected."
-    else:
-        crop_score = (
-            0.45 * rainfall_score +
-            0.45 * temp_score +
-            0.10 * elev_score
-        )
-        climate_flag = "Climate conditions acceptable."
+    crop_score = (
+        0.45 * rainfall_score +
+        0.40 * temp_score +
+        0.15 * elev_score
+    )
 
     return {
         "rainfall_mm": rainfall,
@@ -158,6 +121,5 @@ def evaluate_crop(polygon_ee, crop: str, lat: float, lon: float):
         "rainfall_score": round(rainfall_score, 3),
         "temperature_score": round(temp_score, 3),
         "elevation_score": round(elev_score, 3),
-        "crop_score": round(crop_score, 3),
-        "climate_flag": climate_flag
+        "crop_score": round(crop_score, 3)
     }
