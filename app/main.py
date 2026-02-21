@@ -1,27 +1,35 @@
+# app/main.py
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from shapely.geometry import shape
+import ee
 
 from app.schemas import PlotRequest
 from app.modules.geometry import validate_geometry
 from app.modules.ndvi import validate_ndvi
 from app.modules.landuse import compute_land_use_score
+from app.modules.crop_engine import evaluate_crop
 from app.config import initialize_gee
+
 
 app = FastAPI(
     title="Agricultural Plot Validation API",
-    version="2.0.0"
+    version="3.0.0"
 )
 
-# ----------------------------
-# Initialize GEE once
-# ----------------------------
+
+# ===============================
+# Initialize GEE
+# ===============================
 @app.on_event("startup")
 def startup_event():
     initialize_gee()
 
-# ----------------------------
+
+# ===============================
 # CORS
-# ----------------------------
+# ===============================
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,16 +38,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ----------------------------
+
+# ===============================
 # Root
-# ----------------------------
+# ===============================
 @app.get("/")
 def root():
-    return {"message": "API is running successfully"}
+    return {"message": "API running successfully"}
 
-# ----------------------------
+
+# ===============================
 # Plot Validation
-# ----------------------------
+# ===============================
 @app.post("/validate-plot")
 def validate_plot(request: PlotRequest):
 
@@ -53,8 +63,6 @@ def validate_plot(request: PlotRequest):
         return {
             "decision": "FAIL",
             "stage": "geometry_validation",
-            "farmer_id": request.farmer_id,
-            "crop": request.crop,
             "geometry": geometry_result
         }
 
@@ -65,9 +73,6 @@ def validate_plot(request: PlotRequest):
         return {
             "decision": "FAIL",
             "stage": "ndvi_validation",
-            "farmer_id": request.farmer_id,
-            "crop": request.crop,
-            "geometry": geometry_result,
             "ndvi": ndvi_result
         }
 
@@ -75,33 +80,49 @@ def validate_plot(request: PlotRequest):
         return {
             "decision": "FAIL",
             "stage": "ndvi_validation",
-            "farmer_id": request.farmer_id,
-            "crop": request.crop,
-            "geometry": geometry_result,
             "ndvi": ndvi_result
         }
 
-    # 3️⃣ Land Use (Dynamic World)
+    # 3️⃣ Land Use
     landuse_result = compute_land_use_score(request.polygon)
 
     if landuse_result["land_score"] < 0.3:
         return {
             "decision": "FAIL",
             "stage": "landuse_validation",
-            "farmer_id": request.farmer_id,
-            "crop": request.crop,
-            "geometry": geometry_result,
-            "ndvi": ndvi_result,
             "land_use": landuse_result
         }
 
-    # SUCCESS
+    # 4️⃣ Crop Engine
+
+    polygon_shape = shape(request.polygon)
+    centroid = polygon_shape.centroid
+    lat = centroid.y
+    lon = centroid.x
+
+    coords = list(polygon_shape.exterior.coords)
+    gee_polygon = ee.Geometry.Polygon([coords])
+
+    crop_result = evaluate_crop(
+        gee_polygon,
+        request.crop,
+        lat,
+        lon
+    )
+
+    if crop_result["crop_score"] < 0.4:
+        return {
+            "decision": "FAIL",
+            "stage": "crop_validation",
+            "crop_engine": crop_result
+        }
+
+    # ✅ FINAL PASS
     return {
         "decision": "PASS",
-        "stage": "land_validation_complete",
-        "farmer_id": request.farmer_id,
-        "crop": request.crop,
+        "stage": "full_validation_complete",
         "geometry": geometry_result,
         "ndvi": ndvi_result,
-        "land_use": landuse_result
+        "land_use": landuse_result,
+        "crop_engine": crop_result
     }
