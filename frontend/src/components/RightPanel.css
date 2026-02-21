@@ -1,0 +1,229 @@
+.right-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 260px;
+  height: 100vh;
+  background: rgba(15, 20, 18, 0.95);
+  color: #fff;
+  padding: 20px 18px;
+  overflow-y: auto;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.panel-header-right {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.live-indicator {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #00ff88;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 8px 0 0 0;
+  color: #fff;
+}
+
+.analysis-section {
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: rgba(25, 30, 28, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.stat-card.highlight {
+  background: rgba(25, 30, 28, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-value.large {
+  font-size: 28px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.stat-value.confidence {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.stat-value.highlight-orange {
+  color: #ffb347;
+}
+
+.stat-value.highlight-blue {
+  color: #5ac8fa;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.crop-info .info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13px;
+}
+
+.crop-info .info-row:last-child {
+  border-bottom: none;
+}
+
+.crop-info .info-row span:first-child {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+}
+
+.crop-info .info-row .value {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.info-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 12px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.info-item {
+  background: rgba(25, 30, 28, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item .label {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 600;
+}
+
+.info-item .value {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.info-item .value.highlight-orange {
+  color: #ffb347;
+}
+
+.info-item .value.highlight-blue {
+  color: #5ac8fa;
+}
+
+.risk-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.risk-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.risk-level {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.risk-level.risk-low {
+  width: 20%;
+  background: linear-gradient(90deg, #00ff88 0%, #00cc6a 100%);
+}
+
+.risk-level.risk-medium {
+  width: 50%;
+  background: linear-gradient(90deg, #ffa500 0%, #ff8c00 100%);
+}
+
+.risk-level.risk-high {
+  width: 80%;
+  background: linear-gradient(90deg, #ff4444 0%, #cc0000 100%);
+}
+
+.risk-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #00ff88;
+}
+
+/* Scrollbar styling */
+.right-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.right-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.right-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.right-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
