@@ -103,6 +103,10 @@ const MapComponent = () => {
   // Suggested area polygon (from "Generate Area on Map")
   const [suggestedPolygon, setSuggestedPolygon] = useState(null) // { coords: [[lat,lng],...], areaHa: number }
 
+  // Validation state
+  const [validationResult, setValidationResult] = useState(null)
+  const [isValidating, setIsValidating] = useState(false)
+
   const nextId = useRef(1)
 
   // ── Callbacks ──────────────────────────────────────────────
@@ -263,6 +267,9 @@ const MapComponent = () => {
     ring.push(ring[0])
     const geoJson = { type: 'Polygon', coordinates: [ring] }
 
+    setIsValidating(true)
+    setValidationResult(null)
+
     try {
       const response = await fetch('/api/validate-plot', {
         method: 'POST',
@@ -275,9 +282,57 @@ const MapComponent = () => {
       })
       const result = await response.json()
       console.log('Validation result:', result)
+
+      // Mark the shape with its validation status
+      setShapes(s => s.map(sh =>
+        sh.id === shape.id ? { ...sh, validation: result.decision } : sh
+      ))
+      setValidationResult(result)
+      setIsValidating(false)
       return result
     } catch (err) {
       console.error('Submit failed:', err)
+      setValidationResult({ decision: 'ERROR', error: err.message })
+      setIsValidating(false)
+    }
+  }
+
+  // Handle validate button click
+  const handleValidateSelected = () => {
+    const shape = shapes.find(s => s.id === selectedShapeId)
+    if (shape) submitPlot(shape)
+  }
+
+  // Build cropData for RightPanel from validation result
+  const buildCropData = () => {
+    if (!validationResult || validationResult.decision === 'ERROR') return null
+    const geo = validationResult.geometry || {}
+    const ndvi = validationResult.ndvi || {}
+    const selectedShape = shapes.find(s => s.id === selectedShapeId)
+    const areaHa = selectedShape ? calcArea(selectedShape.coords) : 0
+
+    return {
+      area: `${areaHa.toFixed(2)} ha`,
+      plausibility: validationResult.decision === 'PASS' ? 'VALID' : 'INVALID',
+      confidence: ndvi.agriculture_score != null
+        ? `${(ndvi.agriculture_score * 100).toFixed(0)}%`
+        : '--',
+      growingSeason: ndvi.season || '--',
+      climate: {
+        temperature: ndvi.mean_ndvi != null ? `NDVI: ${ndvi.mean_ndvi.toFixed(3)}` : '--',
+        humidity: '--',
+        wind: '--',
+        precipitation: '--',
+        uvIndex: '--'
+      },
+      soil: {
+        type: geo.country || '--',
+        ph: '--',
+        nitrogen: '--',
+        moisture: '--',
+        organicMatter: '--'
+      },
+      risk: validationResult.decision === 'PASS' ? 'Low' : 'High'
     }
   }
 
@@ -290,7 +345,7 @@ const MapComponent = () => {
         suggestedArea={suggestedPolygon ? suggestedPolygon.areaHa : null}
       />
 
-      <RightPanel cropData={null} />
+      <RightPanel cropData={buildCropData()} />
 
       <MapContainer
         center={center}
@@ -410,6 +465,29 @@ const MapComponent = () => {
           />
         )}
       </MapContainer>
+
+
+      {/* Finish Polygon button when drawing */}
+      {activeTool === 'polygon' && drawingPoints.length >= 3 && (
+        <button
+          className="finish-btn"
+          style={{ position: 'absolute', bottom: 90, left: '50%', transform: 'translateX(-50%)', zIndex: 1200 }}
+          onClick={finalizePolygon}
+        >
+          \u2714 Finish Polygon
+        </button>
+      )}
+
+      {/* Validate button for selected shape (only when not drawing) */}
+      {selectedShapeId && activeTool !== 'polygon' && (
+        <button
+          className="validate-btn"
+          onClick={handleValidateSelected}
+          disabled={isValidating}
+        >
+          {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
+        </button>
+      )}
 
       <DrawingTools
         activeTool={activeTool}
