@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import PlotRequest
+from app.modules.geometry import validate_geometry
 
 app = FastAPI(
     title="Agricultural Plot Validation API",
@@ -23,14 +24,15 @@ def root():
 @app.post("/validate-plot")
 def validate_plot(request: PlotRequest):
 
-    if not request.polygon:
-        raise HTTPException(
-            status_code=400,
-            detail="Polygon data is required"
-        )
+    geom_result = validate_geometry(request.polygon)
+
+    if not geom_result["valid"]:
+        return {
+            "decision": "FAIL",
+            "details": geom_result
+        }
 
     return {
-        "farmer_id": request.farmer_id,
-        "crop": request.crop,
-        "status": "Request validated"
+        "decision": "PASS",
+        "geometry": geom_result
     }
