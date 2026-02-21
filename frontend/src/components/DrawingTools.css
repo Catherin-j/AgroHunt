@@ -1,104 +1,140 @@
-.drawing-tools {
+/* ═══════ DRAWING TOOLS ═══════ */
+.drawing-tools-container {
   position: absolute;
-  bottom: 30px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.9);
-  padding: 10px 16px;
-  border-radius: 50px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
+.drawing-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-panel);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  padding: 6px 10px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ── Tool buttons ── */
 .tool-button {
   width: 40px;
   height: 40px;
   border: none;
   background: transparent;
-  border-radius: 50%;
+  border-radius: var(--radius-md);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   position: relative;
+  color: var(--text-secondary);
 }
 
 .tool-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
 }
 
 .tool-button.active {
-  background: transparent;
-}
-
-.tool-button.active .tool-icon {
-  color: #00ff88;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
+  background: var(--accent-glow);
+  color: var(--accent);
 }
 
 .tool-button.active::after {
   content: '';
   position: absolute;
-  width: 46px;
-  height: 46px;
-  border: 2px solid #00ff88;
-  border-radius: 50%;
-  box-shadow: 0 0 12px rgba(0, 255, 136, 0.6), inset 0 0 12px rgba(0, 255, 136, 0.3);
-  animation: pulse-ring 2s infinite;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
-@keyframes pulse-ring {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.05);
-    opacity: 0.8;
-  }
+/* Delete tool — red accent */
+.tool-button.delete-tool.active {
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
+.tool-button.delete-tool.active::after {
+  background: var(--danger);
+}
+
+/* Finish polygon */
+.tool-button.finish-btn {
+  background: var(--success-bg);
+  color: var(--success);
+  margin-left: 2px;
+}
+
+.tool-button.finish-btn:hover {
+  background: rgba(18, 183, 106, 0.18);
+}
+
+/* ── Tool icon ── */
 .tool-icon {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
   position: relative;
   z-index: 1;
-}
-
-.tool-button:hover .tool-icon {
-  color: rgba(255, 255, 255, 0.95);
 }
 
 .tool-button:active .tool-icon {
   transform: scale(0.9);
 }
 
-/* Tooltip on hover */
+/* ── Shapes badge ── */
+.shapes-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-lg);
+  letter-spacing: 0.3px;
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Tooltip ── */
 .tool-button::before {
   content: attr(title);
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-50%) scale(0.8);
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.95);
-  color: #fff;
+  transform: translateX(-50%) translateY(4px);
+  padding: 5px 10px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-size: 11px;
-  font-weight: 600;
-  border-radius: 6px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  border: 1px solid var(--border-medium);
+  box-shadow: var(--shadow-md);
 }
 
 .tool-button:hover::before {
   opacity: 1;
-  transform: translateX(-50%) scale(1);
+  transform: translateX(-50%) translateY(0);
 }
