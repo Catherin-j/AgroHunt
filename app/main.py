@@ -11,7 +11,13 @@ from app.modules.ndvi import validate_ndvi
 from app.modules.landuse import compute_land_use_score
 from app.modules.crop_engine import evaluate_crop
 from app.modules.overlap import compute_overlap_score
+from app.modules.explainability import generate_explainability
 from app.config import initialize_gee
+
+#cath
+from app.modules.scoring_engine import ScoringEngine
+from app.config import SCORING_WEIGHTS, PASS_THRESHOLD
+#cath
 
 
 app = FastAPI(
@@ -136,31 +142,50 @@ def validate_plot(request: PlotRequest):
             "overlap": overlap_result
         }
 
-    # -------------------------------------------------
-    # 6️⃣ Final Weighted Score
-    # -------------------------------------------------
-    final_score = (
-        0.15 * geometry_result["geometry_score"] +
-        0.25 * ndvi_result["agriculture_score"] +
-        0.25 * landuse_result["land_score"] +
-        0.20 * crop_result["crop_score"] +
-        0.15 * overlap_result["overlap_score"]
+    #cath
+    #  Final Scoring (MCDA Aggregation)
+
+    engine = ScoringEngine(
+        weights=SCORING_WEIGHTS,
+        threshold=PASS_THRESHOLD
     )
 
-    final_score = round(final_score, 3)
+    module_scores = {
+        "geometry": geometry_result["geometry_score"],
+        "ndvi": ndvi_result["agriculture_score"],
+        "land": landuse_result["land_score"],
+        "crop": crop_result["crop_score"],
+        "overlap": overlap_result["overlap_score"]
+    }
 
-    # -------------------------------------------------
-    # 7️⃣ Final Decision Matrix
-    # -------------------------------------------------
+    scoring_output = engine.compute(module_scores)
+
+    final_score = scoring_output["final_score"]
+
     if final_score >= 0.65:
         decision = "PASS"
     elif final_score >= 0.45:
         decision = "REVIEW"
     else:
         decision = "FAIL"
+    #cath
 
     # -------------------------------------------------
-    # 8️⃣ Final Response
+    # 8️⃣ Explainability Layer
+    # -------------------------------------------------
+    explainability_output = generate_explainability(
+        geometry_result=geometry_result,
+        ndvi_result=ndvi_result,
+        landuse_result=landuse_result,
+        crop_result=crop_result,
+        overlap_result=overlap_result,
+        final_score=final_score,
+        decision=decision,
+        contribution_breakdown=scoring_output["contribution_breakdown"]
+    )
+
+    # -------------------------------------------------
+    # 9️⃣ Final Response
     # -------------------------------------------------
     return {
         "decision": decision,
@@ -169,5 +194,6 @@ def validate_plot(request: PlotRequest):
         "ndvi": ndvi_result,
         "land_use": landuse_result,
         "crop_engine": crop_result,
-        "overlap": overlap_result
+        "overlap": overlap_result,
+        "explainability": explainability_output
     }
