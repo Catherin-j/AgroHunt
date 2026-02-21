@@ -89,7 +89,7 @@ def generate_explainability(
         )
     elif decision == "REVIEW":
         explanation.append(
-            "Your plot requires manual review before approval."
+            "Your plot requires manual review before approval!."
         )
     else:
         explanation.append(
