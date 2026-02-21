@@ -1,0 +1,341 @@
+/* ═══════ RIGHT PANEL ═══════ */
+.right-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  padding: 20px 16px;
+  overflow-y: auto;
+  z-index: 1000;
+  border-left: 1px solid var(--border-subtle);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ── Header ── */
+.panel-header-right {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--success);
+  background: var(--success-bg);
+  padding: 3px 10px 3px 8px;
+  border-radius: var(--radius-lg);
+}
+
+.status-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 10px 0 0 0;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+
+/* ── Panel content ── */
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Highlight card ── */
+.highlight-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.highlight-card:hover {
+  border-color: var(--border-medium);
+}
+
+.card-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.card-value-large {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Stats grid ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: var(--transition);
+}
+
+.stat-box:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+}
+
+.box-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.box-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.box-val.accent {
+  color: var(--accent);
+}
+
+/* ── Info groups ── */
+.info-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  transition: var(--transition);
+}
+
+.info-group:hover {
+  border-color: var(--border-medium);
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.group-header svg {
+  color: var(--text-muted);
+}
+
+/* Mini cards (climate) */
+.info-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.info-mini-card {
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: var(--transition);
+}
+
+.info-mini-card:hover {
+  background: var(--bg-card-hover);
+}
+
+.mini-label {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+.mini-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-val.warm {
+  color: var(--warm);
+}
+
+.mini-val.cool {
+  color: var(--cool);
+}
+
+/* Details list (soil) */
+.details-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detail-row:first-child {
+  padding-top: 0;
+}
+
+.row-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.row-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.row-val.highlight {
+  color: var(--accent);
+}
+
+/* ── Risk section ── */
+.risk-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  transition: var(--transition);
+}
+
+.risk-container:hover {
+  border-color: var(--border-medium);
+}
+
+.risk-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.risk-bar-bg {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.risk-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.risk-fill.fill-low {
+  width: 20%;
+  background: var(--success);
+}
+
+.risk-fill.fill-medium {
+  width: 50%;
+  background: var(--warning);
+}
+
+.risk-fill.fill-high {
+  width: 80%;
+  background: var(--danger);
+}
+
+.risk-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.risk-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.info-icon {
+  color: var(--text-muted);
+  cursor: help;
+}
+
+/* ── Scrollbar ── */
+.right-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.right-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.right-panel::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 10px;
+}
+
+.right-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
