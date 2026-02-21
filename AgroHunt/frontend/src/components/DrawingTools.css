@@ -1,0 +1,104 @@
+.drawing-tools {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px 16px;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tool-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tool-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tool-button.active {
+  background: transparent;
+}
+
+.tool-button.active .tool-icon {
+  color: #00ff88;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
+}
+
+.tool-button.active::after {
+  content: '';
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 2px solid #00ff88;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.6), inset 0 0 12px rgba(0, 255, 136, 0.3);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.tool-icon {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.tool-button:hover .tool-icon {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.tool-button:active .tool-icon {
+  transform: scale(0.9);
+}
+
+/* Tooltip on hover */
+.tool-button::before {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tool-button:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
