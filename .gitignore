@@ -1,7 +1,19 @@
-# Python bytecode and cache
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
 
 # Virtual environments
 venv/
@@ -9,31 +21,33 @@ venv/
 env/
 ENV/
 
-# Environment variables
-.env
-.env.*
-backend/.env
-
 # Build and packaging artifacts
 build/
 dist/
+site/
 *.egg-info/
 .eggs/
+*.egg
+pip-wheel-metadata/
 
-# Test and coverage
-.pytest_cache/
+# Test and coverage artifacts
 .coverage
 .coverage.*
 htmlcov/
-.mypy_cache/
-.ruff_cache/
+coverage.xml
 
-# Logs and runtime files
+# Local runtime and database files
 *.log
 *.pid
 *.out
+*.err
+*.sqlite3
+*.db
 
-# IDE/editor
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE/editor files
 .vscode/
 .idea/
 *.swp
