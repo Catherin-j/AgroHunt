@@ -56,16 +56,37 @@ def initialize_gee():
 
 
 # =========================================================
-# 🗄 SUPABASE INITIALIZATION
+# 🗄 SUPABASE INITIALIZATION (Lazy)
 # =========================================================
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+_supabase_client: Client = None
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError("Supabase credentials missing in environment variables.")
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+def get_supabase() -> Client:
+    """
+    Returns the Supabase client, initializing it on first call.
+    This avoids crashing at import time if env vars are missing
+    (e.g. during tests or when only some modules are used).
+    """
+    global _supabase_client
+
+    if _supabase_client is None:
+        url = os.getenv("SUPABASE_URL")
+        key = os.getenv("SUPABASE_KEY")
+
+        if not url or not key:
+            raise ValueError("Supabase credentials missing in environment variables.")
+
+        _supabase_client = create_client(url, key)
+
+    return _supabase_client
+
+
+# Backward-compatible module-level alias (lazy property via __getattr__)
+def __getattr__(name):
+    if name == "supabase":
+        return get_supabase()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 # =========================================================

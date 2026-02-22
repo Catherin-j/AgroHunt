@@ -2,7 +2,7 @@
 
 import requests
 import ee
-from app.config import supabase
+from app.config import get_supabase
 
 
 def fetch_climate(lat: float, lon: float, year: int = 2023):
@@ -47,7 +47,7 @@ def get_crop_requirements(crop: str):
     crop = crop.strip().lower()
 
     response = (
-        supabase.table("crop_requirements")
+        get_supabase().table("crop_requirements")
         .select("*")
         .ilike("crop_name", crop)
         .execute()
