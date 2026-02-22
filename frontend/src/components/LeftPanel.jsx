@@ -1,14 +1,9 @@
 import React, { useState, useMemo } from 'react'
-import { MapPin, Crosshair, Plus, X, Ruler, Wheat } from 'lucide-react'
+import { Crosshair, Plus, X, Ruler, Wheat } from 'lucide-react'
 import * as turf from '@turf/turf'
 import './LeftPanel.css'
 
-const LeftPanel = ({ onFlyToLocation, onCropSelect, onGenerateArea, suggestedArea }) => {
-  const [location, setLocation] = useState({
-    country: '',
-    state: '',
-    district: ''
-  })
+const LeftPanel = ({ onCropSelect, onGenerateArea, suggestedArea }) => {
 
   const [coordsList, setCoordsList] = useState([
     { latitude: '', longitude: '' }
@@ -61,13 +56,6 @@ const LeftPanel = ({ onFlyToLocation, onCropSelect, onGenerateArea, suggestedAre
     } catch { return null }
   }, [validCoords])
 
-  // ── Fly to first valid coordinate ─────────────────────
-  const handleFlyToLocation = () => {
-    if (validCoords.length > 0) {
-      onFlyToLocation({ lat: validCoords[0].lat, lng: validCoords[0].lng })
-    }
-  }
-
   // ── Convert manual area to hectares ───────────────────
   const toHectares = (val, unit) => {
     const v = parseFloat(val)
@@ -103,59 +91,23 @@ const LeftPanel = ({ onFlyToLocation, onCropSelect, onGenerateArea, suggestedAre
     <div className="left-panel">
       <div className="panel-header">
         <h2 className="app-title">AgroSight</h2>
-        <span className="pro-badge">PRO</span>
       </div>
 
-      {/* ── LOCATION ────────────────────────────────── */}
+      {/* ── CROP ────────────────────────────────────── */}
       <div className="panel-section">
         <div className="section-header">
-          <MapPin size={14} className="section-icon-svg" />
-          <h3>LOCATION</h3>
+          <Wheat size={14} className="section-icon-svg" />
+          <h3>CROP</h3>
         </div>
 
         <div className="form-group">
-          <label>COUNTRY</label>
-          <select
-            value={location.country}
-            onChange={(e) => setLocation({ ...location, country: e.target.value })}
-          >
-            <option value="">Select country...</option>
-            <option value="india">India</option>
-            <option value="usa">United States</option>
-            <option value="brazil">Brazil</option>
-            <option value="china">China</option>
+          <label>CROP TYPE</label>
+          <select value={selectedCrop} onChange={handleCropChange}>
+            <option value="">Select crop...</option>
+            <option value="rice">Rice</option>
+            <option value="wheat">Wheat</option>
           </select>
         </div>
-
-        <div className="form-group">
-          <label>STATE</label>
-          <select
-            value={location.state}
-            onChange={(e) => setLocation({ ...location, state: e.target.value })}
-          >
-            <option value="">Select state...</option>
-            <option value="kerala">Kerala</option>
-            <option value="karnataka">Karnataka</option>
-            <option value="tamil-nadu">Tamil Nadu</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>DISTRICT</label>
-          <select
-            value={location.district}
-            onChange={(e) => setLocation({ ...location, district: e.target.value })}
-          >
-            <option value="">Select district...</option>
-            <option value="thiruvananthapuram">Thiruvananthapuram</option>
-            <option value="ernakulam">Ernakulam</option>
-            <option value="kozhikode">Kozhikode</option>
-          </select>
-        </div>
-
-        <button className="fly-button" onClick={handleFlyToLocation}>
-          ✈️ Fly to Location
-        </button>
       </div>
 
       {/* ── COORDINATES ─────────────────────────────── */}
@@ -239,7 +191,7 @@ const LeftPanel = ({ onFlyToLocation, onCropSelect, onGenerateArea, suggestedAre
           <input
             type="number"
             className="area-input-field"
-            placeholder="Area value"
+            placeholder="Area value (ha)"
             value={areaValue}
             onChange={(e) => setAreaValue(e.target.value)}
             min="0"
@@ -272,26 +224,6 @@ const LeftPanel = ({ onFlyToLocation, onCropSelect, onGenerateArea, suggestedAre
         )}
       </div>
 
-      {/* ── CROP ────────────────────────────────────── */}
-      <div className="panel-section">
-        <div className="section-header">
-          <Wheat size={14} className="section-icon-svg" />
-          <h3>CROP</h3>
-        </div>
-
-        <div className="form-group">
-          <label>CROP TYPE</label>
-          <select value={selectedCrop} onChange={handleCropChange}>
-            <option value="">Select crop...</option>
-            <option value="rice">Rice</option>
-            <option value="wheat">Wheat</option>
-            <option value="corn">Corn</option>
-            <option value="cotton">Cotton</option>
-            <option value="sugarcane">Sugarcane</option>
-            <option value="soybean">Soybean</option>
-          </select>
-        </div>
-      </div>
     </div>
   )
 }

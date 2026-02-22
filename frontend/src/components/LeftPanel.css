@@ -123,6 +123,12 @@
   padding-right: 30px;
 }
 
+.form-group select option,
+.form-group select optgroup {
+  color: #000;
+  background: #fff;
+}
+
 .fly-button {
   width: 100%;
   padding: 11px;
@@ -223,7 +229,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xs);
-  color: var(--text-primary);
+  color: #fff;
   font-size: 12px;
   font-family: 'Inter', monospace;
   transition: var(--transition);
@@ -285,7 +291,7 @@
 .area-value {
   font-size: 13px;
   font-weight: 700;
-  color: var(--success);
+  color: #fff;
   font-family: 'Inter', monospace;
   line-height: 1.2;
 }
@@ -320,7 +326,7 @@
   background: var(--bg-input);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  color: var(--text-primary);
+  color: #fff;
   font-size: 12px;
   font-family: inherit;
   transition: var(--transition);

@@ -63,9 +63,9 @@
 
 /* ── Shape tooltip ── */
 .shape-tooltip {
-  background: var(--bg-primary) !important;
+  background: #ffffff !important;
   border: 1px solid var(--accent) !important;
-  color: var(--accent) !important;
+  color: #000000 !important;
   font-weight: 700;
   font-size: 11px;
   font-family: 'Inter', sans-serif;
@@ -84,10 +84,10 @@
 }
 
 /* ── Suggested area tooltip ── */
-.suggested-area-tooltip {
-  background: var(--accent) !important;
+.suggested-tooltip {
+  background: #ffffff !important;
   border: none !important;
-  color: #fff !important;
+  color: #000000 !important;
   font-weight: 700;
   font-size: 11px;
   font-family: 'Inter', sans-serif;
@@ -96,23 +96,18 @@
   box-shadow: var(--shadow-md) !important;
 }
 
-.suggested-area-tooltip::before {
-  border-top-color: var(--accent) !important;
+.suggested-tooltip::before {
+  border-top-color: #ffffff !important;
 }
 
 /* ── Validate button ── */
 .validate-btn {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1200;
-  padding: 12px 28px;
+  padding: 11px 18px;
   background: var(--success, #12b76a);
   border: none;
   border-radius: var(--radius-md, 10px);
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   cursor: pointer;
@@ -123,12 +118,12 @@
 
 .validate-btn:hover:not(:disabled) {
   filter: brightness(1.1);
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(18, 183, 106, 0.45);
 }
 
 .validate-btn:active:not(:disabled) {
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 .validate-btn:disabled {

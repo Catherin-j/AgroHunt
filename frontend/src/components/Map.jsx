@@ -345,7 +345,13 @@ const MapComponent = () => {
         suggestedArea={suggestedPolygon ? suggestedPolygon.areaHa : null}
       />
 
-      <RightPanel cropData={buildCropData()} />
+      <RightPanel
+        validationResult={validationResult}
+        isValidating={isValidating}
+        selectedCrop={selectedCrop}
+        selectedShape={shapes.find(s => s.id === selectedShapeId) || null}
+        calcArea={calcArea}
+      />
 
       <MapContainer
         center={center}
@@ -391,7 +397,7 @@ const MapComponent = () => {
                 click: () => setSelectedShapeId(shape.id)
               }}
             >
-              <Tooltip permanent direction="center" className="shape-tooltip">
+              <Tooltip permanent direction="right" offset={[10, 0]} className="shape-tooltip">
                 {calcArea(shape.coords).toFixed(2)} ha
               </Tooltip>
             </Polygon>
@@ -437,7 +443,7 @@ const MapComponent = () => {
                 dashArray: '10,8'
               }}
             >
-              <Tooltip permanent direction="center" className="suggested-tooltip">
+              <Tooltip permanent direction="right" offset={[10, 0]} className="suggested-tooltip">
                 {suggestedPolygon.areaHa.toFixed(4)} ha — drag corners
               </Tooltip>
             </Polygon>
@@ -467,34 +473,21 @@ const MapComponent = () => {
       </MapContainer>
 
 
-      {/* Finish Polygon button when drawing */}
-      {activeTool === 'polygon' && drawingPoints.length >= 3 && (
-        <button
-          className="finish-btn"
-          style={{ position: 'absolute', bottom: 90, left: '50%', transform: 'translateX(-50%)', zIndex: 1200 }}
-          onClick={finalizePolygon}
-        >
-          \u2714 Finish Polygon
-        </button>
-      )}
-
-      {/* Validate button for selected shape (only when not drawing) */}
-      {selectedShapeId && activeTool !== 'polygon' && (
-        <button
-          className="validate-btn"
-          onClick={handleValidateSelected}
-          disabled={isValidating}
-        >
-          {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
-        </button>
-      )}
-
       <DrawingTools
         activeTool={activeTool}
         onToolSelect={handleToolSelect}
         onFinishPolygon={finalizePolygon}
         drawingPointsCount={drawingPoints.length}
         shapesCount={shapes.length}
+        sideAction={selectedShapeId && activeTool !== 'polygon' ? (
+          <button
+            className="validate-btn"
+            onClick={handleValidateSelected}
+            disabled={isValidating}
+          >
+            {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
+          </button>
+        ) : null}
       />
     </>
   )
