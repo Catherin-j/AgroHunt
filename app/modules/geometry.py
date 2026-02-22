@@ -1,28 +1,39 @@
 from shapely.geometry import shape
-import geopandas as gpd
 import math
 import os
 
 
 # -------------------------------------------------
-# Load World Countries Boundary
+# Lazy-Loaded World Countries Boundary
 # -------------------------------------------------
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "data", "ne_10m_admin_0_countries.shp")
 
-world_gdf = gpd.read_file(DATA_PATH)
+_world_gdf = None
+_world_buffered = None
 
-if world_gdf.crs is None:
-    world_gdf.set_crs("EPSG:4326", inplace=True)
 
-world_gdf = world_gdf.to_crs("EPSG:4326")
+def _load_world_data():
+    """Load world boundary data lazily on first use."""
+    global _world_gdf, _world_buffered
+    if _world_gdf is None:
+        import geopandas as gpd
 
-# Merge all landmass geometries
-world_geom = world_gdf.geometry.unary_union
+        _world_gdf = gpd.read_file(DATA_PATH)
 
-# Small buffer (~5km) to avoid coastline precision issues
-world_buffered = world_geom.buffer(0.05)
+        if _world_gdf.crs is None:
+            _world_gdf.set_crs("EPSG:4326", inplace=True)
+
+        _world_gdf = _world_gdf.to_crs("EPSG:4326")
+
+        # Merge all landmass geometries
+        world_geom = _world_gdf.geometry.unary_union
+
+        # Small buffer (~5km) to avoid coastline precision issues
+        _world_buffered = world_geom.buffer(0.05)
+
+    return _world_gdf, _world_buffered
 
 
 # -------------------------------------------------
@@ -72,6 +83,8 @@ def validate_geometry(geojson_polygon: dict):
     # -------------------------
     # Global Land Check
     # -------------------------
+    world_gdf, world_buffered = _load_world_data()
+
     if not polygon.intersects(world_buffered):
         result["reason"] = "Polygon not located on recognized land area"
         return result
@@ -94,6 +107,7 @@ def validate_geometry(geojson_polygon: dict):
     # -------------------------
     # Area Calculation
     # -------------------------
+    import geopandas as gpd
     gdf = gpd.GeoDataFrame(geometry=[polygon], crs="EPSG:4326")
     gdf_metric = gdf.to_crs("EPSG:3857")
 
