@@ -9,50 +9,35 @@ from supabase import create_client, Client
 load_dotenv()
 
 # =========================================================
-# 🌍 EARTH ENGINE INITIALIZATION (PRODUCTION SAFE)
+# 🌍 EARTH ENGINE INITIALIZATION (STRICT PRODUCTION MODE)
 # =========================================================
 
 def initialize_gee():
     """
-    Initializes Google Earth Engine.
-
-    - On Render → uses Service Account JSON
-    - On Local Machine → uses normal project auth
+    Initializes Google Earth Engine using Service Account ONLY.
+    No local fallback allowed on server.
     """
 
     service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
-    project_id = os.getenv("GEE_PROJECT_ID")
 
-    if service_account_json:
-        # ✅ PRODUCTION MODE (Render)
-        try:
-            service_account_info = json.loads(service_account_json)
+    if not service_account_json:
+        raise RuntimeError(
+            "GEE_SERVICE_ACCOUNT_JSON not found in environment variables."
+        )
 
-            credentials = ee.ServiceAccountCredentials(
-                service_account_info["client_email"],
-                key_data=json.dumps(service_account_info)
-            )
+    try:
+        service_account_info = json.loads(service_account_json)
 
-            ee.Initialize(credentials)
-            print("GEE initialized using Service Account")
+        credentials = ee.ServiceAccountCredentials(
+            service_account_info["client_email"],
+            key_data=json.dumps(service_account_info)
+        )
 
-        except Exception as e:
-            raise RuntimeError(f"GEE Service Account init failed: {e}")
+        ee.Initialize(credentials)
+        print("✅ GEE initialized using Service Account")
 
-    else:
-        # ✅ LOCAL DEVELOPMENT MODE
-        if not project_id:
-            raise ValueError("GEE_PROJECT_ID missing in .env")
-
-        try:
-            ee.Initialize(project=project_id)
-            print("GEE initialized locally")
-
-        except Exception:
-            print("Authenticating GEE locally...")
-            ee.Authenticate()
-            ee.Initialize(project=project_id)
-            print("GEE authenticated and initialized")
+    except Exception as e:
+        raise RuntimeError(f"❌ GEE initialization failed: {e}")
 
 
 # =========================================================
@@ -65,8 +50,6 @@ _supabase_client: Client = None
 def get_supabase() -> Client:
     """
     Returns the Supabase client, initializing it on first call.
-    This avoids crashing at import time if env vars are missing
-    (e.g. during tests or when only some modules are used).
     """
     global _supabase_client
 
@@ -82,7 +65,6 @@ def get_supabase() -> Client:
     return _supabase_client
 
 
-# Backward-compatible module-level alias (lazy property via __getattr__)
 def __getattr__(name):
     if name == "supabase":
         return get_supabase()
