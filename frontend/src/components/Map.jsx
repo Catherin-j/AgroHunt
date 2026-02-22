@@ -270,8 +270,10 @@ const MapComponent = () => {
     setIsValidating(true)
     setValidationResult(null)
 
+    const API = import.meta.env.VITE_API_URL || ''
+
     try {
-      const response = await fetch('/api/validate-plot', {
+      const response = await fetch(`${API}/validate-plot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
