@@ -158,6 +158,18 @@ const MapComponent = () => {
     })
   }, [])
 
+  const handleConfirmSuggested = useCallback(() => {
+    if (!suggestedPolygon || !suggestedPolygon.coords || suggestedPolygon.coords.length < 3) {
+      return
+    }
+
+    const id = nextId.current++
+    setShapes(s => [...s, { id, type: 'polygon', coords: [...suggestedPolygon.coords] }])
+    setSelectedShapeId(id)
+    setSuggestedPolygon(null)
+    setActiveTool('select')
+  }, [suggestedPolygon])
+
   const handleToolSelect = (tool) => {
     // If switching away from a drawing tool, finalize current drawing
     if (activeTool === 'polygon' || activeTool === 'pen') {
@@ -479,14 +491,27 @@ const MapComponent = () => {
         onFinishPolygon={finalizePolygon}
         drawingPointsCount={drawingPoints.length}
         shapesCount={shapes.length}
-        sideAction={selectedShapeId && activeTool !== 'polygon' ? (
-          <button
-            className="validate-btn"
-            onClick={handleValidateSelected}
-            disabled={isValidating}
-          >
-            {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
-          </button>
+        sideAction={(suggestedPolygon || (selectedShapeId && activeTool !== 'polygon')) ? (
+          <div className="map-actions">
+            {suggestedPolygon && (
+              <button
+                className="confirm-btn"
+                onClick={handleConfirmSuggested}
+              >
+                \u2705 Confirm Area
+              </button>
+            )}
+
+            {selectedShapeId && activeTool !== 'polygon' && (
+              <button
+                className="validate-btn"
+                onClick={handleValidateSelected}
+                disabled={isValidating}
+              >
+                {isValidating ? '\u23f3 Validating...' : '\u2705 Validate Plot'}
+              </button>
+            )}
+          </div>
         ) : null}
       />
     </>

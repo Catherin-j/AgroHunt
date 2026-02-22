@@ -10,7 +10,7 @@ import {
   BarChart3,
   Map,
   Leaf,
-  ShieldAlert
+  Droplets
 } from 'lucide-react'
 import './RightPanel.css'
 
@@ -47,7 +47,7 @@ const RightPanel = ({ validationResult, isValidating, selectedCrop, selectedShap
   const ndvi = hasResult ? (validationResult.ndvi || {}) : {}
   const landUse = hasResult ? (validationResult.land_use || {}) : {}
   const cropEngine = hasResult ? (validationResult.crop_engine || {}) : {}
-  const overlap = hasResult ? (validationResult.overlap || {}) : {}
+  const soil = hasResult ? (validationResult.soil || {}) : {}
   const explainability = hasResult ? (validationResult.explainability || {}) : {}
 
   const contributionBreakdown = explainability.contribution_breakdown || {}
@@ -188,21 +188,29 @@ const RightPanel = ({ validationResult, isValidating, selectedCrop, selectedShap
 
         <div className="info-group">
           <div className="group-header">
-            <ShieldAlert size={14} />
-            <span>OVERLAP CHECK</span>
+            <Droplets size={14} />
+            <span>SOIL PROPERTIES</span>
           </div>
           <div className="details-list">
             <div className="detail-row">
-              <span className="row-label">Overlap Ratio</span>
-              <span className="row-val">{toPercent(overlap.overlap_ratio)}</span>
+              <span className="row-label">Soil pH</span>
+              <span className="row-val">{formatNumber(soil.soil_ph, 2)}</span>
             </div>
             <div className="detail-row">
-              <span className="row-label">Overlap Severity</span>
-              <span className="row-val">{overlap.severity || '--'}</span>
+              <span className="row-label">Clay</span>
+              <span className="row-val">{formatNumber(soil.clay, 1, '%')}</span>
             </div>
             <div className="detail-row">
-              <span className="row-label">Overlap Score</span>
-              <span className="row-val">{toPercent(overlap.overlap_score)}</span>
+              <span className="row-label">Sand</span>
+              <span className="row-val">{formatNumber(soil.sand, 1, '%')}</span>
+            </div>
+            <div className="detail-row">
+              <span className="row-label">Silt</span>
+              <span className="row-val">{formatNumber(soil.silt, 1, '%')}</span>
+            </div>
+            <div className="detail-row">
+              <span className="row-label">Texture</span>
+              <span className="row-val">{soil.soil_texture || '--'}</span>
             </div>
           </div>
         </div>
@@ -262,9 +270,9 @@ const RightPanel = ({ validationResult, isValidating, selectedCrop, selectedShap
             {validationResult?.reason && (
               <p className="explainability-item muted">Reason: {validationResult.reason}</p>
             )}
-            {(geometry.reason || ndvi.reason || overlap.explanation) && (
+            {(geometry.reason || ndvi.reason) && (
               <p className="explainability-item muted">
-                {(geometry.reason || ndvi.reason || overlap.explanation)}
+                {(geometry.reason || ndvi.reason)}
               </p>
             )}
           </div>

@@ -11,6 +11,7 @@ from app.modules.ndvi import validate_ndvi
 from app.modules.landuse import compute_land_use_score
 from app.modules.crop_engine import evaluate_crop
 from app.modules.overlap import compute_overlap_score
+from app.modules.soil import get_soil_data
 from app.modules.explainability import generate_explainability
 from app.config import initialize_gee
 
@@ -112,12 +113,30 @@ def validate_plot(request: PlotRequest):
     )
 
     # -------------------------------------------------
+    # 4b️⃣ Soil Properties (SoilGrids)
+    # -------------------------------------------------
+    soil_result = get_soil_data(lat, lon)
+
+    # -------------------------------------------------
     # 5️⃣ Overlap Detection (Fraud Check)
     # -------------------------------------------------
     overlap_result = compute_overlap_score(
         request.polygon,
         request.farmer_id
     )
+
+    # Hard reject on any overlap
+    if overlap_result.get("overlap_ratio", 0) > 0:
+        return {
+            "decision": "FAIL",
+            "reason": "Overlapping plot detected",
+            "geometry": geometry_result,
+            "ndvi": ndvi_result,
+            "land_use": landuse_result,
+            "crop_engine": crop_result,
+            "soil": soil_result,
+            "overlap": overlap_result
+        }
 
     # Hard fraud rejection
     if overlap_result["severity"] == "critical":
@@ -194,6 +213,7 @@ def validate_plot(request: PlotRequest):
         "ndvi": ndvi_result,
         "land_use": landuse_result,
         "crop_engine": crop_result,
+        "soil": soil_result,
         "overlap": overlap_result,
         "explainability": explainability_output
     }

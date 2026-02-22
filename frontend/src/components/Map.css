@@ -101,6 +101,37 @@
 }
 
 /* ── Validate button ── */
+.map-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm-btn {
+  padding: 11px 16px;
+  background: #ff9800;
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 152, 0, 0.35);
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+}
+
+.confirm-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 152, 0, 0.42);
+}
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
 .validate-btn {
   padding: 11px 18px;
   background: var(--success, #12b76a);
